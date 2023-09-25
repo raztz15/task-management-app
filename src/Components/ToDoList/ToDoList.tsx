@@ -10,6 +10,7 @@ import { ToDoListContent } from './ToDoListContent/ToDoListContent'
 import { Modal } from '../Modal/Modal'
 import { ModalTypesConsts } from '../../Constants/ModalTypesConsts'
 import { getAddOneTaskModalProps, getClearAllTasksModalProps, getDeleteTaskModalProps, getInitModalProps } from './ToDoListContent/ToDoProps'
+import { ToDoListActions } from './ToDoListActions/ToDoListActions'
 
 export const ToDoList = () => {
 
@@ -26,7 +27,6 @@ export const ToDoList = () => {
     useEffect(() => {
         if (toDos) setTodoList(prevState => ({ ...prevState, toDos }))
     }, [toDos])
-
 
     const addNewToDo = () => {
         dispatch(addToDoAction({
@@ -62,6 +62,14 @@ export const ToDoList = () => {
         dispatch(IncompleteTaskAction(taskId))
     }
 
+    const getToDoListActionProps = () => {
+        return {
+            openModalByType,
+            setIsShownCompletedTasks,
+            isShownCompletedTasks
+        }
+    }
+
     const getToDoListContentProps = () => {
         return {
             todoList,
@@ -90,14 +98,7 @@ export const ToDoList = () => {
         <div className='todo-list--title'>
             <h1>My Tasks</h1>
         </div>
-        <div className='todo-list--actions'>
-            <div className='add-new-todo--button'>
-                <button onClick={() => openModalByType(ModalTypesConsts.ADD_ONE_TASK_MODAL)}>Add new TODO</button>
-            </div>
-            <div className='filter-todo--button'>
-                <button onClick={() => setIsShownCompletedTasks(!isShownCompletedTasks)}>Completed Tasks</button>
-            </div>
-        </div>
+        <ToDoListActions {...getToDoListActionProps()} />
         <div className='todo-list--list'>
             <div className='todo-list--list__header'>
                 <div className='number-of-tasks-left'>
