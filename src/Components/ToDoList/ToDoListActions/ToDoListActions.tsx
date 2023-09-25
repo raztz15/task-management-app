@@ -1,3 +1,4 @@
+import './ToDoListActions.css'
 import { useState } from 'react'
 import { ModalTypesConsts } from '../../../Constants/ModalTypesConsts'
 
@@ -17,8 +18,8 @@ export const ToDoListActions = (props: IToDoListActionsProps) => {
         <div className='add-new-todo--button'>
             <button onClick={() => openModalByType(ModalTypesConsts.ADD_ONE_TASK_MODAL)}>Add new TODO</button>
         </div>
-        <div className='todo-list--sorting-input'>
-            <button>Sort By</button>
+        <div className='todo-list--sorting-button'>
+            <button onClick={() => setisSortListShown(!isSortListShown)}>Sort By</button>
             {isSortListShown && <div className='todo-list--sorting-options'>
                 <div>Date</div>
                 <div>Name</div>

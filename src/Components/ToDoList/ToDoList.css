@@ -7,22 +7,6 @@
     color: white;
 }
 
-.todo-list--actions {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    padding-bottom: 20px;
-}
-
-.todo-list--actions button {
-    cursor: pointer;
-    background-color: #18c58f;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 4px;
-    border: none;
-}
-
 .todo-list--list {
     padding: 20px 15px;
     display: flex;
