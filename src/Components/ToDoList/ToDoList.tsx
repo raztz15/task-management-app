@@ -1,7 +1,7 @@
 import './ToDoList.css'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { ToDo, addToDoAction, completeTaskAction, deleteAllToDosAction, deleteOneTaskAction } from '../../Actions/toDoAction'
+import { IncompleteTaskAction, ToDo, addToDoAction, completeTaskAction, deleteAllToDosAction, deleteOneTaskAction } from '../../Actions/toDoAction'
 import { RootState } from '../../Store/store'
 import { getNumberOfCompletedTasks, getNumberOfLeftTasks, getTodayOrTomorrowDate } from '../../utils'
 import { GenericConsts } from '../../Constants/GenericConts'
@@ -58,11 +58,16 @@ export const ToDoList = () => {
         dispatch(completeTaskAction(taskId))
     }
 
+    const handleInCompleteTask = (taskId: number) => {
+        dispatch(IncompleteTaskAction(taskId))
+    }
+
     const getToDoListContentProps = () => {
         return {
             todoList,
             deleteOneTask,
             handleCompleteTask,
+            handleInCompleteTask,
             openModalByType,
             isShownCompletedTasks
         }

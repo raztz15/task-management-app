@@ -2,7 +2,8 @@ export const toDoActionTypes = {
     ADD_TO_DO: "ADD_TO_DO",
     CLEAR_ALL_TO_DOS: "CLEAR_ALL_TO_DOS",
     DELETE_ONE_TASK: "DELETE_ONE_TASK",
-    COMPLETE_TASK: "COMPLETE_TASK"
+    COMPLETE_TASK: "COMPLETE_TASK",
+    IN_COMPLETE_TASK: "IN_COMPLETE_TASK"
 }
 
 export interface ToDo {
@@ -37,6 +38,13 @@ export const deleteOneTaskAction = (taskId: number) => {
 export const completeTaskAction = (taskId: number) => {
     return {
         type: toDoActionTypes.COMPLETE_TASK,
+        payload: taskId
+    }
+}
+
+export const IncompleteTaskAction = (taskId: number) => {
+    return {
+        type: toDoActionTypes.IN_COMPLETE_TASK,
         payload: taskId
     }
 }
