@@ -6,7 +6,7 @@ import { KeyBoardEventsConsts } from '../../Constants/KeyBoardEventsConsts'
 interface IModalProps {
     title: string
     component: ReactNode
-    buttons: Array<IButton>
+    buttons?: Array<IButton>
     isOpen?: boolean
     setIsOpen: (val: boolean) => void
 }
@@ -45,7 +45,7 @@ export const Modal = (props: IModalProps) => {
             <div className='modal--wrapper'>
                 <div className='modal--title'>{title}</div>
                 <div className='modal--body'>{component}</div>
-                <div className='modal--buttons'>{buttons.map(({ text, onClick, className }, idx) =>
+                <div className='modal--buttons'>{buttons?.map(({ text, onClick, className }, idx) =>
                     <div key={idx} className={`modal--button ${className ?? ''}`} onClick={() => onClick()}>{text}</div>)}</div>
             </div>
         </div >, portalElement

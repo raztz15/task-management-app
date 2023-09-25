@@ -68,7 +68,7 @@ export const ToDoList = () => {
         }
     }
 
-    const getClearAllModalProps = (modalType: string) => {
+    const getDynamicModalProps = (modalType: string) => {
         switch (modalType) {
             case ModalTypesConsts.CLEAR_ALL_TASKS_MODAL:
                 return getClearAllTasksModalProps(setIsModalOpen, clearAllTask, isModalOpen)
@@ -101,7 +101,7 @@ export const ToDoList = () => {
                 <div className='clear-all-tasks-button' onClick={() => openModalByType(ModalTypesConsts.CLEAR_ALL_TASKS_MODAL)}>Clear all tasks</div>
             </div>
             <ToDoListContent {...getToDoListContentProps()} />
-            {isModalOpen && <Modal {...getClearAllModalProps(modalType)} />}
+            {isModalOpen && <Modal {...getDynamicModalProps(modalType)} />}
         </div>
     </div>
 }
