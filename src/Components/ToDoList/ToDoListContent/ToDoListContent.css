@@ -1,0 +1,48 @@
+.todo-entity {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #999;
+    padding: 10px 0px;
+}
+
+
+.todo-entity:hover {
+    padding: 10px;
+    transform: scale(1.09); /* Increase size by 5% */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a shadow */
+    background-color: #3498db; /* Change background color on hover */
+    cursor: pointer; /* Change cursor to a pointer on hover */
+    border-radius: 4px;
+    background-color: #0faafa; /* A contrasting color */
+    color: #fff
+}
+
+.todo-entity--desc {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.todo-entity--desc:first-child {
+    min-width: 50%;
+}
+
+.todo-entity--desc > div:first-child {
+    font-weight: 600;
+    font-size: 17px;
+}
+
+.todo-entity--desc > div:nth-child(2) {
+    font-weight: 100;
+    font-size: 14px;
+}
+
+.todo-entity--actions {
+    display: flex;
+    gap: 10px;
+}
+
+.todo-entity--actions > * {
+    width: 25px;
+}

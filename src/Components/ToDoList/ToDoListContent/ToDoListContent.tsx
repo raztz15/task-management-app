@@ -1,32 +1,39 @@
+import './ToDoListContent.css'
 import { toDoList } from '../../../Reducers/toDoReducer'
 import { ReactComponent as Trash } from '../../../Assets/Icons/trash.svg'
 import { ReactComponent as TaskIcon } from '../../../Assets/Icons/task-icon.svg'
 import { ReactComponent as TaskCompletedIcon } from '../../../Assets/Icons/task-completed-icon.svg'
 import { formattingService } from '../../../formattingService'
+import { ModalTypesConsts } from '../../../Constants/ModalTypesConsts'
 
 interface IToDoListContentProps {
     todoList: toDoList | undefined
-    deleteOneTask: (taskId: number) => void
     handleCompleteTask: (taskId: number) => void
+    openModalByType: (modalType: string, taskId?: number) => void
+    isShownCompletedTasks: boolean
 }
+
 export const ToDoListContent = (props: IToDoListContentProps) => {
 
-    const { todoList, deleteOneTask, handleCompleteTask } = props
+    const { todoList, handleCompleteTask, openModalByType, isShownCompletedTasks } = props
 
     const service = new formattingService()
 
+    const getFilteredTasks = () => {
+        return isShownCompletedTasks ? todoList?.toDos.filter(task => task.isCompleted) : todoList?.toDos
+    }
+
     return (
-        <div>{todoList?.toDos.map((todo) => <div key={todo.id} className='todo-entity'>
+        <div>{getFilteredTasks()?.map((todo) => <div key={todo.id} className='todo-entity'>
             <div className='todo-entity--desc'>
                 <div>{todo.title}</div>
                 <div>{todo.description}</div>
             </div>
             <div>{`Due to - ${service.getFormattedDate(new Date(todo.dueDate))}`}</div>
             <div className='todo-entity--actions'>
-                {/* TODO --- if not using css classname delete them */}
-                <Trash className='todo-entity--actions__delete' onClick={() => deleteOneTask(todo.id)} />
+                <Trash onClick={() => openModalByType(ModalTypesConsts.DELETE_TASK_MODAL, todo.id)} />
                 {todo.isCompleted ? <TaskCompletedIcon /> :
-                    <TaskIcon className='todo-entity--actions__task-status' onClick={() => handleCompleteTask(todo.id)} />}
+                    <TaskIcon onClick={() => handleCompleteTask(todo.id)} />}
             </div>
         </div>)}</div>
     )
