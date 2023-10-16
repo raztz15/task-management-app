@@ -1,18 +1,32 @@
 import './ToDoListActions.css'
-import { useState } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { ModalTypesConsts } from '../../../Constants/ModalTypesConsts'
+import { toDoList } from '../../../Reducers/toDoReducer'
+import { ThemeContext, useTheme } from '../ToDoList'
 
 interface IToDoListActionsProps {
     openModalByType: (val: string) => void
     setIsShownCompletedTasks: (val: boolean) => void
-    isShownCompletedTasks: boolean
 }
 
 export const ToDoListActions = (props: IToDoListActionsProps) => {
 
-    const { openModalByType, setIsShownCompletedTasks, isShownCompletedTasks } = props
+    const { todoList, setTodoList, isShownCompletedTasks } = useTheme()
+
+    const { openModalByType, setIsShownCompletedTasks } = props
 
     const [isSortListShown, setisSortListShown] = useState<boolean>(false)
+
+    const getFilteredTasks = () => {
+        setIsShownCompletedTasks(!isShownCompletedTasks);
+        const filteredList = isShownCompletedTasks ? todoList?.toDos.filter(task => task.isCompleted) : todoList?.toDos;
+        if (filteredList) setTodoList({
+            ...todoList,
+            toDos: filteredList,
+        });
+    };
+
+    const sortOptionsList = [{ id: 1, desc: "Date" }, { id: 2, desc: "Name" }]
 
     return <div className='todo-list--actions'>
         <div className='add-new-todo--button'>
@@ -21,12 +35,13 @@ export const ToDoListActions = (props: IToDoListActionsProps) => {
         <div className='todo-list--sorting-button'>
             <button onClick={() => setisSortListShown(!isSortListShown)}>Sort By</button>
             {isSortListShown && <div className='todo-list--sorting-options'>
-                <div>Date</div>
-                <div>Name</div>
+                {sortOptionsList.map(({ desc }, idx) =>
+                    <div key={idx} className='todo-list--sorting-option' onClick={() => setisSortListShown(false)}>
+                        {desc}</div>)}
             </div>}
         </div>
         <div className='filter-todo--button'>
-            <button onClick={() => setIsShownCompletedTasks(!isShownCompletedTasks)}>Completed Tasks</button>
+            <button onClick={() => setIsShownCompletedTasks(!isShownCompletedTasks)}>{`${isShownCompletedTasks ? 'All Tasks' : 'Completed Tasks'}`}</button>
         </div>
     </div>
 }

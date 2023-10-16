@@ -14,6 +14,8 @@
     border: none;
 }
 
+
+
 .todo-list--sorting-button {
     position: relative;
 }
@@ -21,11 +23,26 @@
 .todo-list--sorting-options {
     margin-top: 5px;
     position: absolute;
-    padding: 10px;
     text-align: left;
     background-color: white;
     z-index: 1; 
     border: 1px solid #ccc; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); 
     width: 100%;
+    border-radius: 4px;
+}
+
+.todo-list--sorting-option {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.todo-list--sorting-option:hover {
+    background-color: #93E896;
+    color: white;
+}
+
+.filter-todo--button button {
+    min-width: 150px;
+    background-color: transparent;
 }

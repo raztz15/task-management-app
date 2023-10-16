@@ -11,7 +11,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 40%;
+  height: 250px;
   background: linear-gradient(to right, #8610d6, #0faafa);
 }
 
@@ -20,7 +20,6 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 60%;
   background-color: #f3f4f6; /* Adjust the color as needed */
 }
 

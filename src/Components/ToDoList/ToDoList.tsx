@@ -1,5 +1,5 @@
 import './ToDoList.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, createContext, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { IncompleteTaskAction, ToDo, addToDoAction, completeTaskAction, deleteAllToDosAction, deleteOneTaskAction } from '../../Actions/toDoAction'
 import { RootState } from '../../Store/store'
@@ -11,10 +11,20 @@ import { Modal } from '../Modal/Modal'
 import { ModalTypesConsts } from '../../Constants/ModalTypesConsts'
 import { getAddOneTaskModalProps, getClearAllTasksModalProps, getDeleteTaskModalProps, getInitModalProps } from './ToDoListContent/ToDoProps'
 import { ToDoListActions } from './ToDoListActions/ToDoListActions'
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
+interface ThemeContextType {
+    todoList: toDoList | undefined,
+    setTodoList: (val: toDoList) => void
+    isShownCompletedTasks: boolean
+}
+
+export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ToDoList = () => {
 
     const dispatch = useDispatch()
+
 
     const { toDos } = useSelector((state: RootState) => state.toDoReducer)
 
@@ -23,19 +33,14 @@ export const ToDoList = () => {
     const [modalType, setModalType] = useState<string>("")
     const [taskId, setTaskId] = useState<number>(0)
     const [isShownCompletedTasks, setIsShownCompletedTasks] = useState(false)
+    const [sortBy, setSortBy] = useState<{ id: number, desc: string }>()
 
     useEffect(() => {
         if (toDos) setTodoList(prevState => ({ ...prevState, toDos }))
     }, [toDos])
 
-    const addNewToDo = () => {
-        dispatch(addToDoAction({
-            id: Math.random(),
-            title: "Programming",
-            description: "Making new assignment",
-            dueDate: getTodayOrTomorrowDate(GenericConsts.TOMORROW),
-            isCompleted: false
-        }))
+    const addNewToDo = (task: ToDo) => {
+        dispatch(addToDoAction(task))
     }
 
     const openModalByType = (modalType: string, taskId?: number) => {
@@ -66,13 +71,13 @@ export const ToDoList = () => {
         return {
             openModalByType,
             setIsShownCompletedTasks,
-            isShownCompletedTasks
         }
     }
 
     const getToDoListContentProps = () => {
         return {
             todoList,
+            setTodoList,
             deleteOneTask,
             handleCompleteTask,
             handleInCompleteTask,
@@ -94,20 +99,41 @@ export const ToDoList = () => {
         }
     }
 
-    return <div className='todo-list--container'>
-        <div className='todo-list--title'>
-            <h1>My Tasks</h1>
-        </div>
-        <ToDoListActions {...getToDoListActionProps()} />
-        <div className='todo-list--list'>
-            <div className='todo-list--list__header'>
-                <div className='number-of-tasks-left'>
-                    {`${getNumberOfLeftTasks(todoList)} tasks left (${getNumberOfCompletedTasks(todoList)} tasks completed)`}
-                </div>
-                <div className='clear-all-tasks-button' onClick={() => openModalByType(ModalTypesConsts.CLEAR_ALL_TASKS_MODAL)}>Clear all tasks</div>
+    const conextProps = {
+        todoList,
+        setTodoList,
+        isShownCompletedTasks
+    }
+
+
+    return <ThemeContext.Provider value={conextProps}>
+        <div className='todo-list--container'>
+            <div className='todo-list--title'>
+                <h1>My Tasks</h1>
             </div>
-            <ToDoListContent {...getToDoListContentProps()} />
-            {isModalOpen && <Modal {...getDynamicModalProps(modalType)} />}
+            <ToDoListActions {...getToDoListActionProps()} />
+            <div className='todo-list--list'>
+                <div className='todo-list--list__header'>
+                    <div className='number-of-tasks-left'>
+                        {`${getNumberOfLeftTasks(todoList)} tasks left (${getNumberOfCompletedTasks(todoList)} tasks completed)`}
+                    </div>
+                    <div className='clear-all-tasks-button'
+                        onClick={() => openModalByType(ModalTypesConsts.CLEAR_ALL_TASKS_MODAL)}>Clear all tasks</div>
+                </div>
+                <DndProvider backend={HTML5Backend}>
+                    <ToDoListContent {...getToDoListContentProps()} />
+                </DndProvider>
+                {isModalOpen && <Modal {...getDynamicModalProps(modalType)} />}
+            </div>
         </div>
-    </div>
+    </ThemeContext.Provider>
+
+
 }
+export const useTheme = () => {
+    const context = useContext(ThemeContext);
+    if (context === undefined) {
+        throw new Error('useTheme must be used within a ThemeProvider');
+    }
+    return context;
+};
