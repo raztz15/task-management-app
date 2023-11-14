@@ -4,26 +4,40 @@ import { getTodayOrTomorrowDate } from "../utils";
 
 export interface toDoList {
     toDos: Array<ToDo>
+    copyData: Array<ToDo>
 }
+/*
+ const [todoListCopy, settodoListCopy] = useState(todoList)
+
+    const getFilteredTasks = () => {
+        setIsShownCompletedTasks(!isShownCompletedTasks);
+        const filteredList = isShownCompletedTasks ? todoList?.toDos.filter(task => task.isCompleted) : todoList?.toDos;
+        if (filteredList) setTodoList({
+            ...todoList,
+            toDos: filteredList,
+        });
+    };
+*/
+const mockData = [
+    {
+        id: Math.random(),
+        title: "Groceries",
+        description: "Milk, Eggs, Snacks",
+        dueDate: getTodayOrTomorrowDate(GenericConsts.TODAY),
+        isCompleted: false
+    },
+    {
+        id: Math.random(),
+        title: "Cleaing the house",
+        description: "Cleaning dishes, windows and floor",
+        dueDate: getTodayOrTomorrowDate(GenericConsts.TOMORROW),
+        isCompleted: false
+    },
+]
 
 const initialState: toDoList = {
-    toDos:
-        [
-            {
-                id: Math.random(),
-                title: "Groceries",
-                description: "Milk, Eggs, Snacks",
-                dueDate: getTodayOrTomorrowDate(GenericConsts.TODAY),
-                isCompleted: false
-            },
-            {
-                id: Math.random(),
-                title: "Cleaing the house",
-                description: "Cleaning dishes, windows and floor",
-                dueDate: getTodayOrTomorrowDate(GenericConsts.TOMORROW),
-                isCompleted: false
-            },
-        ]
+    toDos: mockData,
+    copyData: mockData
 }
 
 
@@ -55,6 +69,37 @@ export const toDoReducer = (state = initialState, action: { type: string, payloa
                 return task;
             });
             return { ...state, toDos: updatedToDos };
+        case toDoActionTypes.FILTER_LIST:
+            const filterBy = action.payload
+
+            if (filterBy)
+                updatedToDos = state.copyData.filter(filterBy)
+            else
+                updatedToDos = state.copyData
+            return { ...state, toDos: updatedToDos };
+        case toDoActionTypes.SORT_LIST:
+            const sortBy = action.payload
+            switch (sortBy) {
+                case "Date":
+                    updatedToDos = state.toDos.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())
+                    break
+                case "Name":
+                    updatedToDos = state.toDos.sort((a, b) => a.title.localeCompare(b.title))
+                    /*updatedToDos = state.toDos.sort((a,b) =>{
+                        if(a.title < b.title) {
+                              return 1  
+                        }
+                        if (a.title > b.title) {
+                            return -1
+                        }
+                        return 0
+                    })*/
+                    break
+                default:
+                    updatedToDos = state.toDos
+                    break;
+            }
+            return { ...state, updatedToDos }
         default:
             return state
     }

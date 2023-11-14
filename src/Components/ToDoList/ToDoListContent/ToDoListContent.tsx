@@ -3,10 +3,10 @@ import { toDoList } from '../../../Reducers/toDoReducer'
 import { DndProvider, DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 import { ToDo } from '../../../Actions/toDoAction'
 import { ToDoItem } from '../ToDoItem/ToDoItem';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../Reducers/reducers';
 
 interface IToDoListContentProps {
-    todoList: toDoList | undefined
-    setTodoList: (val: toDoList) => void
     handleCompleteTask: (taskId: number) => void
     handleInCompleteTask: (taskId: number) => void
     openModalByType: (modalType: string, taskId?: number) => void
@@ -15,7 +15,9 @@ interface IToDoListContentProps {
 
 export const ToDoListContent = (props: IToDoListContentProps) => {
 
-    const { todoList, setTodoList, handleCompleteTask, handleInCompleteTask, openModalByType, isShownCompletedTasks } = props
+    const { handleCompleteTask, handleInCompleteTask, openModalByType, isShownCompletedTasks } = props
+
+    const { toDos } = useSelector((state: RootState) => state.toDoReducer)
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "TODO",
@@ -26,14 +28,14 @@ export const ToDoListContent = (props: IToDoListContentProps) => {
     }));
 
     const replaceItems = (draggedTodoId: number, monitor: DropTargetMonitor) => {
-        const draggedIndex = todoList?.toDos.findIndex((task) => task.id === draggedTodoId);
+        const draggedIndex = toDos.findIndex((task) => task.id === draggedTodoId);
         const clientOffset = monitor.getClientOffset();
         if (draggedIndex === -1) return;
         const droppedPosition = {
             x: clientOffset?.x,
             y: clientOffset?.y,
         };
-        const droppedIndex = todoList?.toDos.findIndex((task, index) => {
+        const droppedIndex = toDos.findIndex((task, index) => {
             if (index === draggedIndex) {
                 return false;
             }
@@ -55,8 +57,8 @@ export const ToDoListContent = (props: IToDoListContentProps) => {
         console.log("droppedIndex ===> ", droppedIndex);
 
         const updatedTodoList: any = []
-        if (todoList) {
-            const updatedTodoList = [...todoList.toDos];
+        if (toDos) {
+            const updatedTodoList = [...toDos];
         }
         const [draggedTask] = updatedTodoList.splice(draggedIndex, 1);
 
@@ -106,7 +108,7 @@ export const ToDoListContent = (props: IToDoListContentProps) => {
     }
 
     return (
-        <div ref={drop}>{todoList?.toDos.map(
+        <div ref={drop}>{toDos.map(
             (todo, idx) => <div key={idx}><ToDoItem todo={todo} {...getToDoItemProps()} /></div>
         )}</div>
     )

@@ -15,8 +15,6 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 interface ThemeContextType {
-    todoList: toDoList | undefined,
-    setTodoList: (val: toDoList) => void
     isShownCompletedTasks: boolean
 }
 
@@ -28,16 +26,11 @@ export const ToDoList = () => {
 
     const { toDos } = useSelector((state: RootState) => state.toDoReducer)
 
-    const [todoList, setTodoList] = useState<toDoList>()
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [modalType, setModalType] = useState<string>("")
     const [taskId, setTaskId] = useState<number>(0)
     const [isShownCompletedTasks, setIsShownCompletedTasks] = useState(false)
     const [sortBy, setSortBy] = useState<{ id: number, desc: string }>()
-
-    useEffect(() => {
-        if (toDos) setTodoList(prevState => ({ ...prevState, toDos }))
-    }, [toDos])
 
     const addNewToDo = (task: ToDo) => {
         dispatch(addToDoAction(task))
@@ -76,8 +69,6 @@ export const ToDoList = () => {
 
     const getToDoListContentProps = () => {
         return {
-            todoList,
-            setTodoList,
             deleteOneTask,
             handleCompleteTask,
             handleInCompleteTask,
@@ -100,8 +91,6 @@ export const ToDoList = () => {
     }
 
     const conextProps = {
-        todoList,
-        setTodoList,
         isShownCompletedTasks
     }
 
@@ -115,7 +104,7 @@ export const ToDoList = () => {
             <div className='todo-list--list'>
                 <div className='todo-list--list__header'>
                     <div className='number-of-tasks-left'>
-                        {`${getNumberOfLeftTasks(todoList)} tasks left (${getNumberOfCompletedTasks(todoList)} tasks completed)`}
+                        {`${getNumberOfLeftTasks(toDos)} tasks left (${getNumberOfCompletedTasks(toDos)} tasks completed)`}
                     </div>
                     <div className='clear-all-tasks-button'
                         onClick={() => openModalByType(ModalTypesConsts.CLEAR_ALL_TASKS_MODAL)}>Clear all tasks</div>

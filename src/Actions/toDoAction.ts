@@ -3,7 +3,9 @@ export const toDoActionTypes = {
     CLEAR_ALL_TO_DOS: "CLEAR_ALL_TO_DOS",
     DELETE_ONE_TASK: "DELETE_ONE_TASK",
     COMPLETE_TASK: "COMPLETE_TASK",
-    IN_COMPLETE_TASK: "IN_COMPLETE_TASK"
+    IN_COMPLETE_TASK: "IN_COMPLETE_TASK",
+    FILTER_LIST: "FILTER_LIST",
+    SORT_LIST: "SORT_LIST"
 }
 
 export interface ToDo {
@@ -46,5 +48,19 @@ export const IncompleteTaskAction = (taskId: number) => {
     return {
         type: toDoActionTypes.IN_COMPLETE_TASK,
         payload: taskId
+    }
+}
+
+export const filterTodoListAction = (filterBy?: (todo: ToDo) => boolean) => {
+    return {
+        type: toDoActionTypes.FILTER_LIST,
+        payload: filterBy
+    }
+}
+
+export const sortDataByAction = (sortBy: string) => {
+    return {
+        type: toDoActionTypes.SORT_LIST,
+        payload: sortBy
     }
 }

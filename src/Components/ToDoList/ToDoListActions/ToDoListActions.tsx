@@ -3,6 +3,8 @@ import { useState, useEffect, useContext } from 'react'
 import { ModalTypesConsts } from '../../../Constants/ModalTypesConsts'
 import { toDoList } from '../../../Reducers/toDoReducer'
 import { ThemeContext, useTheme } from '../ToDoList'
+import { useDispatch } from 'react-redux'
+import { filterTodoListAction, sortDataByAction } from '../../../Actions/toDoAction'
 
 interface IToDoListActionsProps {
     openModalByType: (val: string) => void
@@ -11,29 +13,41 @@ interface IToDoListActionsProps {
 
 export const ToDoListActions = (props: IToDoListActionsProps) => {
 
-    const { todoList, setTodoList, isShownCompletedTasks } = useTheme()
+    const { isShownCompletedTasks } = useTheme()
 
     const { openModalByType, setIsShownCompletedTasks } = props
 
     const [isSortListShown, setisSortListShown] = useState<boolean>(false)
 
-    const getFilteredTasks = () => {
-        setIsShownCompletedTasks(!isShownCompletedTasks);
-        const filteredList = isShownCompletedTasks ? todoList?.toDos.filter(task => task.isCompleted) : todoList?.toDos;
-        if (filteredList) setTodoList({
-            ...todoList,
-            toDos: filteredList,
-        });
-    };
+    const dispatch = useDispatch()
+
 
     const sortOptionsList = [{ id: 1, desc: "Date" }, { id: 2, desc: "Name" }]
+
+
+    const filterData = () => {
+        if (isShownCompletedTasks) {
+            dispatch(filterTodoListAction(
+                (todo) => !todo.isCompleted
+            ))
+        } else {
+            dispatch(filterTodoListAction(
+                (todo) => todo.isCompleted
+            ))
+        }
+        setIsShownCompletedTasks(!isShownCompletedTasks)
+    }
+
+    const sortData = () => {
+        dispatch(sortDataByAction("Name"))
+    }
 
     return <div className='todo-list--actions'>
         <div className='add-new-todo--button'>
             <button onClick={() => openModalByType(ModalTypesConsts.ADD_ONE_TASK_MODAL)}>Add new TODO</button>
         </div>
         <div className='todo-list--sorting-button'>
-            <button onClick={() => setisSortListShown(!isSortListShown)}>Sort By</button>
+            <button onClick={sortData}>Sort By</button>
             {isSortListShown && <div className='todo-list--sorting-options'>
                 {sortOptionsList.map(({ desc }, idx) =>
                     <div key={idx} className='todo-list--sorting-option' onClick={() => setisSortListShown(false)}>
@@ -41,7 +55,7 @@ export const ToDoListActions = (props: IToDoListActionsProps) => {
             </div>}
         </div>
         <div className='filter-todo--button'>
-            <button onClick={() => setIsShownCompletedTasks(!isShownCompletedTasks)}>{`${isShownCompletedTasks ? 'All Tasks' : 'Completed Tasks'}`}</button>
+            <button onClick={filterData}>{`${isShownCompletedTasks ? 'All Tasks' : 'Completed Tasks'}`}</button>
         </div>
     </div>
 }
