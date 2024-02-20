@@ -31,11 +31,16 @@ export const getDeleteTaskModalProps = (setIsOpen: (val: boolean) => void, delet
 export const getAddOneTaskModalProps = (setIsOpen: (val: boolean) => void, isOpen: boolean) => {
     return {
         title: ModalTitlesConsts.ADD_NEW_TASK,
-        component: <AddNewTaskModalForm />,
-        buttons: [
-            { text: GenericConsts.CANCEL, onClick: () => setIsOpen(false) },
-            { text: GenericConsts.YES, onClick: () => setIsOpen(false) },
-        ],
+        component: <AddNewTaskModalForm inputs={[
+            { type: "text", label: "Title", name: "title" },
+            { type: "text", label: "Description", name: "description" },
+            { type: "date", label: "Due Date", name: "dueDate" },
+        ]}
+            buttons={[
+                { text: GenericConsts.CANCEL, onClick: () => setIsOpen(false) },
+                { text: GenericConsts.YES, onClick: () => setIsOpen(false) },
+            ]}
+        />,
         isOpen,
         setIsOpen
     }

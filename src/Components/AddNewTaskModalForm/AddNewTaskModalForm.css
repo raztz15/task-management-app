@@ -1,0 +1,15 @@
+.form--container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form--input {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form--input label {
+    font-weight: 600;
+}

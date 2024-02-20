@@ -4,4 +4,5 @@ export class GenericConsts {
     static readonly YES = "Yes"
     static readonly CANCEL = "Cancel"
     static readonly APPROVE_LOWER_CASE = "approve"
+    static readonly DATE = "date"
 }

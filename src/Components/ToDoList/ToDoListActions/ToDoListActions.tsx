@@ -5,6 +5,7 @@ import { toDoList } from '../../../Reducers/toDoReducer'
 import { ThemeContext, useTheme } from '../ToDoList'
 import { useDispatch } from 'react-redux'
 import { filterTodoListAction, sortDataByAction } from '../../../Actions/toDoAction'
+import { Tooltip } from '../../Tooltip/Tooltip'
 
 interface IToDoListActionsProps {
     openModalByType: (val: string) => void
@@ -44,7 +45,9 @@ export const ToDoListActions = (props: IToDoListActionsProps) => {
 
     return <div className='todo-list--actions'>
         <div className='add-new-todo--button'>
-            <button onClick={() => openModalByType(ModalTypesConsts.ADD_ONE_TASK_MODAL)}>Add new TODO</button>
+            <Tooltip text="Add new TODO">
+                <button onClick={() => openModalByType(ModalTypesConsts.ADD_ONE_TASK_MODAL)}>Add new TODO</button>
+            </Tooltip>
         </div>
         <div className='todo-list--sorting-button'>
             <button onClick={sortData}>Sort By</button>

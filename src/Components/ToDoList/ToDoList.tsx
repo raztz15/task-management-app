@@ -13,6 +13,7 @@ import { getAddOneTaskModalProps, getClearAllTasksModalProps, getDeleteTaskModal
 import { ToDoListActions } from './ToDoListActions/ToDoListActions'
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { Tooltip } from '../Tooltip/Tooltip'
 
 interface ThemeContextType {
     isShownCompletedTasks: boolean
@@ -25,6 +26,8 @@ export const ToDoList = () => {
 
 
     const { toDos } = useSelector((state: RootState) => state.toDoReducer)
+
+    console.log("todos ===> ", toDos)
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [modalType, setModalType] = useState<string>("")

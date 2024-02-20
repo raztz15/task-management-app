@@ -11,7 +11,7 @@ interface IModalProps {
     setIsOpen: (val: boolean) => void
 }
 
-interface IButton {
+export interface IButton {
     text: string,
     onClick: () => void
     className?: string
@@ -21,7 +21,7 @@ export const Modal = (props: IModalProps) => {
 
     const { isOpen = false, setIsOpen, title, component, buttons } = props
 
-    if (!props.title || !props.component || !props.buttons || !props.setIsOpen) {
+    if (!props.title || !props.component || !props.setIsOpen) {
         throw new Error('Required props are missing.');
     }
 
@@ -40,14 +40,15 @@ export const Modal = (props: IModalProps) => {
         };
     }, []);
 
-    return portalElement ? ReactDOM.createPortal(
+    return portalElement && ReactDOM.createPortal(
         <div className='modal--container'>
             <div className='modal--wrapper'>
                 <div className='modal--title'>{title}</div>
                 <div className='modal--body'>{component}</div>
                 <div className='modal--buttons'>{buttons?.map(({ text, onClick, className }, idx) =>
-                    <div key={idx} className={`modal--button ${className ?? ''}`} onClick={() => onClick()}>{text}</div>)}</div>
+                    <div key={idx} className={`modal--button ${className ?? ''}`} onClick={onClick}>{text}</div>)}
+                </div>
             </div>
         </div >, portalElement
-    ) : null
+    )
 }

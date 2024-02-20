@@ -7,6 +7,7 @@ import { ReactComponent as TaskIcon } from '../../../Assets/Icons/task-icon.svg'
 import { ReactComponent as TaskCompletedIcon } from '../../../Assets/Icons/task-completed-icon.svg'
 import { ModalTypesConsts } from '../../../Constants/ModalTypesConsts'
 import { useDrag } from 'react-dnd';
+import { Tooltip } from '../../Tooltip/Tooltip'
 
 interface IToDoItemProps {
     todo: ToDo
@@ -35,9 +36,11 @@ export const ToDoItem = (props: IToDoItemProps) => {
             </div>
             <div>{`Due to - ${service.getFormattedDate(new Date(todo.dueDate))}`}</div>
             <div className='todo-entity--actions'>
-                <Trash onClick={() => openModalByType(ModalTypesConsts.DELETE_TASK_MODAL, todo.id)} />
-                {todo?.isCompleted ? <TaskCompletedIcon onClick={() => handleInCompleteTask(todo.id)} /> :
-                    <TaskIcon onClick={() => handleCompleteTask(todo?.id)} />}
+                <Tooltip text='Delete TODO'>
+                    <Trash onClick={() => openModalByType(ModalTypesConsts.DELETE_TASK_MODAL, todo.id)} />
+                </Tooltip>
+                {todo?.isCompleted ? <Tooltip text='Mark TODO as incomplete'><TaskCompletedIcon onClick={() => handleInCompleteTask(todo.id)} /></Tooltip> :
+                    <Tooltip text='Mark TODO as complete'><TaskIcon onClick={() => handleCompleteTask(todo?.id)} /></Tooltip>}
             </div>
         </div>
     )

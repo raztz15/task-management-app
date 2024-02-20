@@ -61,6 +61,14 @@ export const toDoReducer = (state = initialState, action: { type: string, payloa
                 if (task.id === completedTaskId) return { ...task, isCompleted: true };
                 return task;
             });
+            state.toDos.map(task => {
+                if (task.id === completedTaskId) return { ...task, isCompleted: true }
+                return task
+            })
+            // console.log("todos ==> ", state.toDos);
+            // console.log("copy data ==> ", state.copyData);
+            // console.log("id ==> ", completedTaskId);
+
             return { ...state, toDos: updatedToDos };
         case toDoActionTypes.IN_COMPLETE_TASK:
             const taskId = action.payload;
