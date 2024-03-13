@@ -12,12 +12,12 @@ export interface ToDo {
     id: number
     title: string
     description: string
-    dueDate: Date
+    dueDate: Date | string
     isCompleted: boolean
 }
 
 export const addToDoAction = (todo: ToDo) => {
-    const newToDo = { ...todo, dueDate: todo.dueDate.toString() }
+    const newToDo = { ...todo, dueDate: todo.dueDate?.toLocaleString(), id: Math.random() }
     return {
         type: toDoActionTypes.ADD_TO_DO,
         payload: newToDo
