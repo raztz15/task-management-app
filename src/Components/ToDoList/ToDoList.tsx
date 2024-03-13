@@ -27,16 +27,17 @@ export const ToDoList = () => {
 
     const { toDos } = useSelector((state: RootState) => state.toDoReducer)
 
-    console.log("todos ===> ", toDos)
-
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [modalType, setModalType] = useState<string>("")
     const [taskId, setTaskId] = useState<number>(0)
     const [isShownCompletedTasks, setIsShownCompletedTasks] = useState(false)
     const [sortBy, setSortBy] = useState<{ id: number, desc: string }>()
+    const [newTask, setNewTask] = useState<ToDo | null>()
 
-    const addNewToDo = (task: ToDo) => {
-        dispatch(addToDoAction(task))
+    const addNewToDo = (e: any) => {
+        e.preventDefault()
+        newTask && dispatch(addToDoAction(newTask))
+        setIsModalOpen(false)
     }
 
     const openModalByType = (modalType: string, taskId?: number) => {
@@ -87,7 +88,7 @@ export const ToDoList = () => {
             case ModalTypesConsts.DELETE_TASK_MODAL:
                 return getDeleteTaskModalProps(setIsModalOpen, deleteOneTask, isModalOpen, taskId)
             case ModalTypesConsts.ADD_ONE_TASK_MODAL:
-                return getAddOneTaskModalProps(setIsModalOpen, isModalOpen)
+                return getAddOneTaskModalProps(setIsModalOpen, isModalOpen, addNewToDo, setNewTask)
             default:
                 return getInitModalProps(setIsModalOpen)
         }

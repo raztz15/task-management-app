@@ -1,3 +1,4 @@
+import { ToDo } from "../../../Actions/toDoAction"
 import { GenericConsts } from "../../../Constants/GenericConts"
 import { ModalTitlesConsts } from "../../../Constants/ModalTitlesConsts"
 import { AddNewTaskModalForm } from "../../AddNewTaskModalForm/AddNewTaskModalForm"
@@ -28,18 +29,22 @@ export const getDeleteTaskModalProps = (setIsOpen: (val: boolean) => void, delet
     }
 }
 
-export const getAddOneTaskModalProps = (setIsOpen: (val: boolean) => void, isOpen: boolean) => {
+export const getAddOneTaskModalProps = (setIsOpen: (val: boolean) => void, isOpen: boolean, saveNewTodo: (e: any) => void, setNewTask: (task: ToDo) => void) => {
+
+    const addOneModalInputs = [
+        { type: "text", label: "Title", name: "title" },
+        { type: "text", label: "Description", name: "description" },
+        { type: "date", label: "Due Date", name: "dueDate" },
+    ]
+
     return {
         title: ModalTitlesConsts.ADD_NEW_TASK,
-        component: <AddNewTaskModalForm inputs={[
-            { type: "text", label: "Title", name: "title" },
-            { type: "text", label: "Description", name: "description" },
-            { type: "date", label: "Due Date", name: "dueDate" },
-        ]}
+        component: <AddNewTaskModalForm inputs={addOneModalInputs}
             buttons={[
                 { text: GenericConsts.CANCEL, onClick: () => setIsOpen(false) },
-                { text: GenericConsts.YES, onClick: () => setIsOpen(false) },
+                { text: GenericConsts.YES, onClick: (e: any) => saveNewTodo(e) },
             ]}
+            setNewTask={setNewTask}
         />,
         isOpen,
         setIsOpen
