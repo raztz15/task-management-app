@@ -1,6 +1,5 @@
 import { ToDo, toDoActionTypes } from "../Actions/toDoAction";
-import { GenericConsts } from "../Constants/GenericConts";
-import { getTodayOrTomorrowDate } from "../utils";
+import { mockData } from "../Store/MockUpData";
 
 export interface toDoList {
     toDos: Array<ToDo>
@@ -18,22 +17,7 @@ export interface toDoList {
         });
     };
 */
-const mockData = [
-    {
-        id: Math.random(),
-        title: "Groceries",
-        description: "Milk, Eggs, Snacks",
-        dueDate: getTodayOrTomorrowDate(GenericConsts.TODAY),
-        isCompleted: false
-    },
-    {
-        id: Math.random(),
-        title: "Cleaing the house",
-        description: "Cleaning dishes, windows and floor",
-        dueDate: getTodayOrTomorrowDate(GenericConsts.TOMORROW),
-        isCompleted: false
-    },
-]
+
 
 const initialState: toDoList = {
     toDos: mockData,
@@ -45,16 +29,16 @@ export const toDoReducer = (state = initialState, action: { type: string, payloa
     let updatedToDos
     switch (action.type) {
         case toDoActionTypes.ADD_TO_DO:
-            const newToDo = action.payload
+            const newToDo = { ...action.payload }
             updatedToDos = [...state.toDos]
             updatedToDos.push(newToDo)
-            return { ...state, toDos: updatedToDos }
+            return { ...state, toDos: updatedToDos, copyData: updatedToDos }
         case toDoActionTypes.CLEAR_ALL_TO_DOS:
-            return { ...state, toDos: [] }
+            return { ...state, toDos: [], copyData: [] }
         case toDoActionTypes.DELETE_ONE_TASK:
             const selectedTaskToDelete = action.payload
             const newArr = state.toDos.filter(task => task.id !== selectedTaskToDelete)
-            return { ...state, toDos: newArr }
+            return { ...state, toDos: newArr, copyData: newArr }
         case toDoActionTypes.COMPLETE_TASK:
             const completedTaskId = action.payload;
             updatedToDos = state.toDos.map(task => {
@@ -65,31 +49,24 @@ export const toDoReducer = (state = initialState, action: { type: string, payloa
                 if (task.id === completedTaskId) return { ...task, isCompleted: true }
                 return task
             })
-            // console.log("todos ==> ", state.toDos);
-            // console.log("copy data ==> ", state.copyData);
-            // console.log("id ==> ", completedTaskId);
-
-            return { ...state, toDos: updatedToDos };
+            return { ...state, toDos: updatedToDos, copyData: updatedToDos };
         case toDoActionTypes.IN_COMPLETE_TASK:
             const taskId = action.payload;
             updatedToDos = state.toDos.map(task => {
                 if (task.id === taskId) return { ...task, isCompleted: false };
                 return task;
             });
-            return { ...state, toDos: updatedToDos };
+            return { ...state, toDos: updatedToDos, copyData: updatedToDos };
         case toDoActionTypes.FILTER_LIST:
             const filterBy = action.payload
-
-            if (filterBy)
-                updatedToDos = state.copyData.filter(filterBy)
-            else
-                updatedToDos = state.copyData
-            return { ...state, toDos: updatedToDos };
+            if (filterBy) updatedToDos = state.copyData.filter(filterBy)
+            else updatedToDos = state.copyData
+            return { ...state, toDos: updatedToDos, copyData: updatedToDos };
         case toDoActionTypes.SORT_LIST:
             const sortBy = action.payload
             switch (sortBy) {
                 case "Date":
-                    updatedToDos = state.toDos.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())
+                    updatedToDos = state.toDos.sort((a, b) => (a.dueDate as Date).getTime() - (b.dueDate as Date).getTime())
                     break
                 case "Name":
                     updatedToDos = state.toDos.sort((a, b) => a.title.localeCompare(b.title))
@@ -107,8 +84,9 @@ export const toDoReducer = (state = initialState, action: { type: string, payloa
                     updatedToDos = state.toDos
                     break;
             }
-            return { ...state, updatedToDos }
+            return { ...state, updatedToDos, copyData: updatedToDos }
         default:
             return state
     }
+
 }
