@@ -55,7 +55,6 @@ export const toDoReducer = (state = initialState, action: { type: string, payloa
             switch (sortBy) {
                 case "Date":
                     updatedToDos = [...state.toDos].sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
-
                     break
                 case "Name":
                     updatedToDos = [...state.toDos].sort((a, b) => a.title.localeCompare(b.title))
