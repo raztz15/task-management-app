@@ -13,7 +13,7 @@ interface IModalProps {
 
 export interface IButton {
     text: string,
-    onClick: () => void
+    onClick: (e: any) => void
     className?: string
 }
 
@@ -45,9 +45,9 @@ export const Modal = (props: IModalProps) => {
             <div className='modal--wrapper'>
                 <div className='modal--title'>{title}</div>
                 <div className='modal--body'>{component}</div>
-                <div className='modal--buttons'>{buttons?.map(({ text, onClick, className }, idx) =>
-                    <div key={idx} className={`modal--button ${className ?? ''}`} onClick={onClick}>{text}</div>)}
-                </div>
+                {buttons && <div className='modal--buttons'>{buttons?.map(({ text, onClick, className }, idx) =>
+                    <div key={idx} className={`modal--button ${className ?? ''}`} onClick={(e) => onClick(e)}>{text}</div>)}
+                </div>}
             </div>
         </div >, portalElement
     )
