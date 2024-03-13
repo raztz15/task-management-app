@@ -19,11 +19,19 @@ export const ToDoListActions = (props: IToDoListActionsProps) => {
     const { openModalByType, setIsShownCompletedTasks } = props
 
     const [isSortListShown, setisSortListShown] = useState<boolean>(false)
+    const [chosenSort, setChosenSort] = useState<string>()
 
     const dispatch = useDispatch()
 
+    useEffect(() => {
+        chosenSort && dispatch(sortDataByAction(chosenSort))
+    }, [chosenSort])
 
-    const sortOptionsList = [{ id: 1, desc: "Date" }, { id: 2, desc: "Name" }]
+
+    const sortOptionsList = [
+        { id: 1, desc: "Date" },
+        { id: 2, desc: "Name" }
+    ]
 
 
     const filterData = () => {
@@ -39,8 +47,13 @@ export const ToDoListActions = (props: IToDoListActionsProps) => {
         setIsShownCompletedTasks(!isShownCompletedTasks)
     }
 
-    const sortData = () => {
-        dispatch(sortDataByAction("Name"))
+    const handleOpenMenu = () => {
+        setisSortListShown(!isSortListShown)
+    }
+
+    const handleDataSort = (chosenSort: string) => {
+        setChosenSort(chosenSort)
+        setisSortListShown(false)
     }
 
     return <div className='todo-list--actions'>
@@ -50,10 +63,10 @@ export const ToDoListActions = (props: IToDoListActionsProps) => {
             </Tooltip>
         </div>
         <div className='todo-list--sorting-button'>
-            <button onClick={sortData}>Sort By</button>
+            <button onClick={handleOpenMenu}>Sort By</button>
             {isSortListShown && <div className='todo-list--sorting-options'>
                 {sortOptionsList.map(({ desc }, idx) =>
-                    <div key={idx} className='todo-list--sorting-option' onClick={() => setisSortListShown(false)}>
+                    <div key={idx} className='todo-list--sorting-option' onClick={() => handleDataSort(desc)}>
                         {desc}</div>)}
             </div>}
         </div>

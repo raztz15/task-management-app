@@ -5,18 +5,6 @@ export interface toDoList {
     toDos: Array<ToDo>
     copyData: Array<ToDo>
 }
-/*
- const [todoListCopy, settodoListCopy] = useState(todoList)
-
-    const getFilteredTasks = () => {
-        setIsShownCompletedTasks(!isShownCompletedTasks);
-        const filteredList = isShownCompletedTasks ? todoList?.toDos.filter(task => task.isCompleted) : todoList?.toDos;
-        if (filteredList) setTodoList({
-            ...todoList,
-            toDos: filteredList,
-        });
-    };
-*/
 
 
 const initialState: toDoList = {
@@ -66,25 +54,17 @@ export const toDoReducer = (state = initialState, action: { type: string, payloa
             const sortBy = action.payload
             switch (sortBy) {
                 case "Date":
-                    updatedToDos = state.toDos.sort((a, b) => (a.dueDate as Date).getTime() - (b.dueDate as Date).getTime())
+                    updatedToDos = [...state.toDos].sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+
                     break
                 case "Name":
-                    updatedToDos = state.toDos.sort((a, b) => a.title.localeCompare(b.title))
-                    /*updatedToDos = state.toDos.sort((a,b) =>{
-                        if(a.title < b.title) {
-                              return 1  
-                        }
-                        if (a.title > b.title) {
-                            return -1
-                        }
-                        return 0
-                    })*/
+                    updatedToDos = [...state.toDos].sort((a, b) => a.title.localeCompare(b.title))
                     break
                 default:
-                    updatedToDos = state.toDos
+                    updatedToDos = [...state.toDos]
                     break;
             }
-            return { ...state, updatedToDos, copyData: updatedToDos }
+            return { ...state, toDos: updatedToDos, copyData: updatedToDos }
         default:
             return state
     }
