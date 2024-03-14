@@ -52,10 +52,10 @@ export const ToDoListActions = (props: IToDoListActionsProps) => {
 
     return <div className='todo-list--actions' >
         <div className='add-new-todo--button' >
-            <button style={{ color: theme.textColor, backgroundColor: isDarkMode ? theme.backgroundColor : undefined }} onClick={() => openModalByType(ModalTypesConsts.ADD_ONE_TASK_MODAL)} >Add new TODO</button>
+            <button style={{ backgroundColor: isDarkMode ? theme.backgroundColor : undefined }} onClick={() => openModalByType(ModalTypesConsts.ADD_ONE_TASK_MODAL)} >Add new TODO</button>
         </div>
         <div className='todo-list--sorting-button'>
-            <button style={{ color: theme.textColor, backgroundColor: isDarkMode ? theme.backgroundColor : undefined }} onClick={handleOpenMenu}>Sort By</button>
+            <button style={{ backgroundColor: isDarkMode ? theme.backgroundColor : undefined }} onClick={handleOpenMenu}>Sort By</button>
             {isSortListShown && <div className='todo-list--sorting-options'>
                 {sortOptionsList.map(({ desc }, idx) =>
                     <div key={idx} className='todo-list--sorting-option' onClick={() => handleDataSort(desc)}>
