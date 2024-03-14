@@ -2,9 +2,19 @@
     width: 40%;
 }
 
-.todo-list--title {
+.todo-list--header {
     display: flex;
     color: white;
+    justify-content: space-between;
+}
+
+.todo-list--header button {
+    cursor: pointer;
+    align-self: center;
+    border: none;
+    font-size: 18px;
+    font-weight: 600;
+    background-color: transparent;
 }
 
 .todo-list--list {

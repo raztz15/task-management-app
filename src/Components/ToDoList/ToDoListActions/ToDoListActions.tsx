@@ -1,22 +1,23 @@
 import './ToDoListActions.css'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { ModalTypesConsts } from '../../../Constants/ModalTypesConsts'
-import { toDoList } from '../../../Reducers/toDoReducer'
-import { ThemeContext, useTheme } from '../ToDoList'
 import { useDispatch } from 'react-redux'
 import { filterTodoListAction, sortDataByAction } from '../../../Actions/toDoAction'
 import { Tooltip } from '../../Tooltip/Tooltip'
+import React from 'react'
+import { ITheme, useTheme } from '../../../Context/ThemeContext'
 
 interface IToDoListActionsProps {
     openModalByType: (val: string) => void
     setIsShownCompletedTasks: (val: boolean) => void
+    isShownCompletedTasks: boolean
 }
 
 export const ToDoListActions = (props: IToDoListActionsProps) => {
 
-    const { isShownCompletedTasks } = useTheme()
+    const { openModalByType, setIsShownCompletedTasks, isShownCompletedTasks } = props
 
-    const { openModalByType, setIsShownCompletedTasks } = props
+    const { theme, isDarkMode } = useTheme()
 
     const [isSortListShown, setisSortListShown] = useState<boolean>(false)
     const [chosenSort, setChosenSort] = useState<string>()
@@ -35,15 +36,8 @@ export const ToDoListActions = (props: IToDoListActionsProps) => {
 
 
     const filterData = () => {
-        if (isShownCompletedTasks) {
-            dispatch(filterTodoListAction(
-                (todo) => !todo.isCompleted
-            ))
-        } else {
-            dispatch(filterTodoListAction(
-                (todo) => todo.isCompleted
-            ))
-        }
+        if (isShownCompletedTasks) dispatch(filterTodoListAction((todo) => !todo.isCompleted))
+        else dispatch(filterTodoListAction((todo) => todo.isCompleted))
         setIsShownCompletedTasks(!isShownCompletedTasks)
     }
 
@@ -56,14 +50,12 @@ export const ToDoListActions = (props: IToDoListActionsProps) => {
         setisSortListShown(false)
     }
 
-    return <div className='todo-list--actions'>
-        <div className='add-new-todo--button'>
-            <Tooltip text="Add new TODO">
-                <button onClick={() => openModalByType(ModalTypesConsts.ADD_ONE_TASK_MODAL)}>Add new TODO</button>
-            </Tooltip>
+    return <div className='todo-list--actions' >
+        <div className='add-new-todo--button' >
+            <button style={{ color: theme.textColor, backgroundColor: isDarkMode ? theme.backgroundColor : undefined }} onClick={() => openModalByType(ModalTypesConsts.ADD_ONE_TASK_MODAL)} >Add new TODO</button>
         </div>
         <div className='todo-list--sorting-button'>
-            <button onClick={handleOpenMenu}>Sort By</button>
+            <button style={{ color: theme.textColor, backgroundColor: isDarkMode ? theme.backgroundColor : undefined }} onClick={handleOpenMenu}>Sort By</button>
             {isSortListShown && <div className='todo-list--sorting-options'>
                 {sortOptionsList.map(({ desc }, idx) =>
                     <div key={idx} className='todo-list--sorting-option' onClick={() => handleDataSort(desc)}>
@@ -71,7 +63,7 @@ export const ToDoListActions = (props: IToDoListActionsProps) => {
             </div>}
         </div>
         <div className='filter-todo--button'>
-            <button onClick={filterData}>{`${isShownCompletedTasks ? 'All Tasks' : 'Completed Tasks'}`}</button>
+            <button style={{ color: theme.textColor }} onClick={filterData}>{`${isShownCompletedTasks ? 'Incompleted Tasks' : 'Completed Tasks'}`}</button>
         </div>
     </div>
 }

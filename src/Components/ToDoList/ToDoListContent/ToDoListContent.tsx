@@ -5,6 +5,7 @@ import { ToDo } from '../../../Actions/toDoAction'
 import { ToDoItem } from '../ToDoItem/ToDoItem';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../Reducers/reducers';
+import React from 'react';
 
 interface IToDoListContentProps {
     handleCompleteTask: (taskId: number) => void
@@ -71,34 +72,6 @@ export const ToDoListContent = (props: IToDoListContentProps) => {
 
     }
 
-
-
-
-    const sortListByField = (field: string, order: string, tasks: ToDo[] | undefined) => {
-        order = "ascending"
-        if (tasks) {
-            const sortedList = [...tasks]
-            sortedList.sort((a, b) => {
-                const dateA = new Date(a.dueDate).getTime();
-                const dateB = new Date(b.dueDate).getTime();
-                if (order === 'ascending') {
-                    return dateA - dateB;
-                } else {
-                    return dateB - dateA;
-                }
-            });
-            return sortedList;
-        }
-        // switch (field) {
-        //     case "Name":
-        //     case "Date":
-
-        //         return
-        //     default:
-        //         break;
-        // }
-    }
-
     const getToDoItemProps = () => {
         return {
             openModalByType,
@@ -109,7 +82,7 @@ export const ToDoListContent = (props: IToDoListContentProps) => {
 
     return (
         <div ref={drop}>{toDos.map(
-            (todo, idx) => <div key={idx}><ToDoItem todo={todo} {...getToDoItemProps()} /></div>
+            (todo: ToDo, idx: number) => <div key={idx}><ToDoItem todo={todo} {...getToDoItemProps()} /></div>
         )}</div>
     )
 }

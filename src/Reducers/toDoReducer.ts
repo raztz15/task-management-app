@@ -14,7 +14,7 @@ const initialState: toDoList = {
 
 
 export const toDoReducer = (state = initialState, action: { type: string, payload: any }) => {
-    let updatedToDos
+    let updatedToDos: Array<ToDo>
     switch (action.type) {
         case toDoActionTypes.ADD_TO_DO:
             const newToDo = { ...action.payload }
@@ -49,7 +49,7 @@ export const toDoReducer = (state = initialState, action: { type: string, payloa
             const filterBy = action.payload
             if (filterBy) updatedToDos = state.copyData.filter(filterBy)
             else updatedToDos = state.copyData
-            return { ...state, toDos: updatedToDos, copyData: updatedToDos };
+            return { ...state, toDos: updatedToDos };
         case toDoActionTypes.SORT_LIST:
             const sortBy = action.payload
             switch (sortBy) {
